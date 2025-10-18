@@ -1,587 +1,590 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="vi">
-
-<head>
+  <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Ôn tập từ vựng</title>
     <style>
-        @font-face {
-  font-family: 'HL Hoctro';
-  src: url('HLHOCTRO.TTF')
-}
-        
-        body{;max-width:1000px;margin:24px auto;padding:0 16px;color:#222;text-align:center;position:relative;min-height:100vh;
-        }
+              @font-face {
+        font-family: 'HL Hoctro';
+        src: url('HLHOCTRO.TTF')
+      }
 
-    h1{font-size:20px;text-align:left;}
-    input[type=file]{margin-top:8px}
-    table{width:100%;border-collapse:collapse;margin-top:12px;text-align:left}
-    th,td{border:1px solid #ddd;padding:8px;text-align:left}
-    th{background:#f5f5f5}
-    .hint{color:#555;font-size:13px;text-align:left;}
-    .error{color:#b00020;text-align:left}
-    .controls{display:flex;gap:8px;align-items:center;margin-top:12px;flex-wrap:wrap;justify-content:center}
-    button{padding:8px 12px;border-radius:6px;border:1px solid #ccc;background:#fff;cursor:pointer}
-    #random-word{background:#009c3d;color:white;}
-    #translate-btn{background:#ffbf00;color:white;}
-    #translate-reverse-btn{background:#f51c1b;color:white;}
+              body{;max-width:1000px;margin:24px auto;padding:0 16px;color:#222;text-align:center;position:relative;min-height:100vh;
+              }
 
-    /* Random word display */
-    #randomWordContainer{display:none;flex-direction:column;align-items:center;padding-top:20px;margin-top:20px;max-width:100%;overflow:hidden;}
-    #modeLabel{font-size:3vw;font-weight:bold;margin-bottom:10px;}
-    #modeLabel.fill{color:blue;}
-    #modeLabel.en2vi{color:deeppink;}
-    #modeLabel.vi2en{color:green;}
+          h1{font-size:20px;text-align:left;}
+          input[type=file]{margin-top:8px}
+          table{width:100%;border-collapse:collapse;margin-top:12px;text-align:left}
+          th,td{border:1px solid #ddd;padding:8px;text-align:left}
+          th{background:#f5f5f5}
+          .hint{color:#555;font-size:13px;text-align:left;}
+          .error{color:#b00020;text-align:left}
+          .controls{display:flex;gap:8px;align-items:center;margin-top:12px;flex-wrap:wrap;justify-content:center}
+          button{padding:8px 12px;border-radius:6px;border:1px solid #ccc;background:#fff;cursor:pointer}
+          #random-word{background:#009c3d;color:white;}
+          #translate-btn{background:#ffbf00;color:white;}
+          #translate-reverse-btn{background:#f51c1b;color:white;}
 
-    #randomWord{margin-top:40px;display:flex;flex-wrap:nowrap;justify-content:center;white-space:nowrap;font-size:10vw;opacity:0;transition:opacity 1s ease-in;max-width:100%;box-sizing:border-box;font-family: 'HL Hoctro';}
-    #randomWord.show{opacity:1;animation:highlight 1.5s ease-in-out}
-    .random-label{display:inline-block;text-align:center;border-bottom:3px solid #ccc;margin:2px;margin-bottom:15px}
-    .random-label.visible{color:blue}
-    .random-label.hidden{color:red}
+          /* Random word display */
+          #randomWordContainer{display:none;flex-direction:column;align-items:center;padding-top:20px;margin-top:20px;max-width:100%;overflow:hidden;}
+          #modeLabel{font-size:3vw;font-weight:bold;margin-bottom:10px;}
+          #modeLabel.fill{color:blue;}
+          #modeLabel.en2vi{color:deeppink;}
+          #modeLabel.vi2en{color:green;}
 
-    .hint-row{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:40px}
-    .subtitle{font-size:36px;color:black;opacity:0;transition:opacity 1s ease-in;}
-    .subtitle.show{opacity:1;animation:highlightSubtitle 1.5s ease-in-out}
+          #randomWord{margin-top:40px;display:flex;flex-wrap:nowrap;justify-content:center;white-space:nowrap;font-size:10vw;opacity:0;transition:opacity 1s ease-in;max-width:100%;box-sizing:border-box;font-family: 'HL Hoctro';}
+          #randomWord.show{opacity:1;animation:highlight 1.5s ease-in-out}
+          .random-label{display:inline-block;text-align:center;border-bottom:3px solid #ccc;margin:2px;margin-bottom:15px}
+          .random-label.visible{color:blue}
+          .random-label.hidden{color:red}
 
-    @keyframes highlight {
-      0% { background-color: yellow; }
-      100% { background-color: transparent; }
-    }
-    @keyframes highlightSubtitle {
-      0% { background-color: lightgreen; }
-      100% { background-color: transparent; }
-    }
+          .hint-row{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:40px}
+          .subtitle{font-size:36px;color:black;opacity:0;transition:opacity 1s ease-in;}
+          .subtitle.show{opacity:1;animation:highlightSubtitle 1.5s ease-in-out}
 
-        .input-group {
-  display: flex;
-  align-items: center;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.08);
-  padding: 6px;
-    margin: 10px;
-  gap: 6px;
-  width: 1000px;
-}
+          @keyframes highlight {
+            0% { background-color: yellow; }
+            100% { background-color: transparent; }
+          }
+          @keyframes highlightSubtitle {
+            0% { background-color: lightgreen; }
+            100% { background-color: transparent; }
+          }
 
-.input-group input {
-  flex: 1;
-  border: none;
-  outline: none;
-  padding: 10px 14px;
-  border-radius: 8px;
-  font-size: 15px;
-  background-color: #f1f5f9;
-  transition: all 0.25s ease;
-}
+              .input-group {
+        display: flex;
+        align-items: center;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+        padding: 6px;
+          margin: 10px;
+        gap: 6px;
+        width: 1000px;
+      }
 
-.input-group input:focus {
-  background-color: #fff;
-  box-shadow: 0 0 0 2px #3b82f6;
-}
+      .input-group input {
+        flex: 1;
+        border: none;
+        outline: none;
+        padding: 10px 14px;
+        border-radius: 8px;
+        font-size: 15px;
+        background-color: #f1f5f9;
+        transition: all 0.25s ease;
+      }
 
-.input-group button {
-  background: #3b82f6;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 10px 18px;
-  font-size: 15px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.25s ease;
-}
+      .input-group input:focus {
+        background-color: #fff;
+        box-shadow: 0 0 0 2px #3b82f6;
+      }
 
-.input-group button:hover {
-  background: #2563eb;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(37,99,235,0.2);
-}
+      .input-group button {
+        background: #3b82f6;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 18px;
+        font-size: 15px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
 
-.input-group button:active {
-  transform: scale(0.97);
-  box-shadow: none;
-}
+      .input-group button:hover {
+        background: #2563eb;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(37,99,235,0.2);
+      }
 
-        .custom-file-upload {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  background: #f8fafc;
-  border: 2px dashed #cbd5e1;
-  border-radius: 10px;
-  padding: 10px 16px;
-  cursor: pointer;
-  font-family: 'Inter', sans-serif;
-  transition: all 0.2s ease;
-}
+      .input-group button:active {
+        transform: scale(0.97);
+        box-shadow: none;
+      }
 
-.custom-file-upload:hover {
-  background: #f1f5f9;
-}
+              .custom-file-upload {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: #f8fafc;
+        border: 2px dashed #cbd5e1;
+        border-radius: 10px;
+        padding: 10px 16px;
+        cursor: pointer;
+        font-family: 'Inter', sans-serif;
+        transition: all 0.2s ease;
+      }
 
-.custom-file-upload input[type="file"] {
-  display: none; /* Ẩn input gốc */
-}
-        
-  </style>
-</head>
+      .custom-file-upload:hover {
+        background: #f1f5f9;
+      }
 
-<body>
+      .custom-file-upload input[type="file"] {
+        display: none; /* Ẩn input gốc */
+      }
+    </style>
+  </head>
+
+  <body>
     <h1>Ôn tập từ vựng</h1>
     <div class="input-group">
-        <input id="txt_google_sheet" placeholder="Nhập link sheet public" />
-        <button id="google-sheet-btn">Đọc link google sheet</button>    
+      <input id="txt_google_sheet" placeholder="Nhập link sheet public" />
+      <button id="google-sheet-btn">Đọc link google sheet</button>
     </div>
-   <div class="input-group">
-       <label class="custom-file-upload">
-  <input id="file-input" type="file" accept=".xlsx,.xls,.csv" />
-  <span id="fileName">Chọn file Excel danh sách từ vựng. Cột A là ngôn ngữ 1, cột B là ngôn ngữ 2</span>
-</label>
+    <div class="input-group">
+      <label class="custom-file-upload">
+        <input id="file-input" type="file" accept=".xlsx,.xls,.csv" />
+        <span id="fileName"
+          >Chọn file Excel danh sách từ vựng. Cột A là ngôn ngữ 1, cột B là ngôn
+          ngữ 2</span
+        >
+      </label>
     </div>
     <div class="controls">
-        <button id="back-btn" disabled>Trở lại danh sách</button></div>
+      <button id="back-btn" disabled>Trở lại danh sách</button>
+    </div>
     <span id="status" class="hint"></span>
     <div id="error" class="error"></div>
     <div class="controls">
-            <button id="translate-btn" disabled>Dịch từ sang tiếng Việt</button>
-            <button id="random-word" disabled>Điền từ vào chỗ trống (Dễ)</button>
-            <button id="translate-reverse-btn" disabled>Điền từ vào chỗ trống (Khó)</button>
-        </div>
+      <button id="translate-btn" disabled>Dịch từ sang tiếng Việt</button>
+      <button id="random-word" disabled>Điền từ vào chỗ trống (Dễ)</button>
+      <button id="translate-reverse-btn" disabled>
+        Điền từ vào chỗ trống (Khó)
+      </button>
+    </div>
     <div id="table-wrap"></div>
     <div id="randomWordContainer">
-        <div id="modeLabel"></div>
-        <div class="hint-row">
-            <div id="hint" class="subtitle"></div>
-            <button id="reveal-btn" disabled>Đáp án</button>
-            <button id="speak-btn" disabled>Phát âm tiếng Anh 🔊</button>
-        </div>
-        <div id="randomWord"></div>
+      <div id="modeLabel"></div>
+      <div class="hint-row">
+        <div id="hint" class="subtitle"></div>
+        <button id="reveal-btn" disabled>Đáp án</button>
+        <button id="speak-btn" disabled>Phát âm tiếng Anh 🔊</button>
+      </div>
+      <div id="randomWord"></div>
     </div>
     <!-- SheetJS (xlsx) library từ CDN -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <script>
-    const input = document.getElementById('file-input');
-    const tableWrap = document.getElementById('table-wrap');
-    const errorEl = document.getElementById('error');
-    const status = document.getElementById('status');
-    const randomBtn = document.getElementById('random-word');
-    const translateBtn = document.getElementById('translate-btn');
-    const translateReverseBtn = document.getElementById('translate-reverse-btn');
-    const backBtn = document.getElementById('back-btn');
-    const googleSheetBtn = document.getElementById('google-sheet-btn');
-    const randomWordDiv = document.getElementById('randomWord');
-    const randomWordContainer = document.getElementById('randomWordContainer');
-    const hintDiv = document.getElementById('hint');
-    const revealBtn = document.getElementById('reveal-btn');
-    const speakBtn = document.getElementById('speak-btn');
-    const modeLabel = document.getElementById('modeLabel');
+          const input = document.getElementById('file-input');
+          const tableWrap = document.getElementById('table-wrap');
+          const errorEl = document.getElementById('error');
+          const status = document.getElementById('status');
+          const randomBtn = document.getElementById('random-word');
+          const translateBtn = document.getElementById('translate-btn');
+          const translateReverseBtn = document.getElementById('translate-reverse-btn');
+          const backBtn = document.getElementById('back-btn');
+          const googleSheetBtn = document.getElementById('google-sheet-btn');
+          const randomWordDiv = document.getElementById('randomWord');
+          const randomWordContainer = document.getElementById('randomWordContainer');
+          const hintDiv = document.getElementById('hint');
+          const revealBtn = document.getElementById('reveal-btn');
+          const speakBtn = document.getElementById('speak-btn');
+          const modeLabel = document.getElementById('modeLabel');
 
-    let rows = [];
-    let currentMode = null; // 'fill', 'en2vi', 'vi2en'
-    let currentRow = null;
+          let rows = [];
+          let currentMode = null; // 'fill', 'en2vi', 'vi2en'
+          let currentRow = null;
 
-    // --- Hàm đọc cookie ---
-function getCookie(name) {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-    console.log(parts);
-  if (parts.length === 2) return parts.pop().split(';').shift();
-}
+          // --- Hàm đọc cookie ---
+      function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+          console.log(parts);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+      }
 
-// --- Hàm ghi cookie (lưu 30 ngày) ---
-function setCookie(name, value, days = 30) {
-  const date = new Date();
-  date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
-  document.cookie = `${name}=${encodeURIComponent(value)}; expires=${date.toUTCString()}; path=/`;
-}
+      // --- Hàm ghi cookie (lưu 30 ngày) ---
+      function setCookie(name, value, days = 30) {
+        const date = new Date();
+        date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+        document.cookie = `${name}=${encodeURIComponent(value)}; expires=${date.toUTCString()}; path=/`;
+      }
 
-    // --- Khi load trang ---
-window.addEventListener('DOMContentLoaded', () => {
-  const input = document.getElementById('txt_google_sheet');
+          // --- Khi load trang ---
+      window.addEventListener('DOMContentLoaded', () => {
+        const input = document.getElementById('txt_google_sheet');
 
-    
-  const savedLink = decodeURIComponent(getCookie('tvonly-sheet-link'));
 
-  // Nếu chưa có cookie thì gán link mặc định
-  const link = savedLink || 'https://docs.google.com/spreadsheets/d/1zYGaKPYvT9_0c60qMY-PdCEWUucCdtWgvCGSvSInFRc/export?format=csv&id=1zYGaKPYvT9_0c60qMY-PdCEWUucCdtWgvCGSvSInFRc&gid=0';
-  input.value = link;
-    
-});
+        const savedLink = decodeURIComponent(getCookie('tvonly-sheet-link'));
 
-    function resetUI() {
-        tableWrap.innerHTML = '';
-        errorEl.textContent = '';
-        status.textContent = '';
-        randomBtn.disabled = true;
-        translateBtn.disabled = true;
-        translateReverseBtn.disabled = true;
-        backBtn.disabled = true;
-        revealBtn.disabled = true;
-        speakBtn.disabled = true;
-        randomWordDiv.innerHTML = '';
-        randomWordDiv.classList.remove('show');
-        hintDiv.textContent = '';
-        hintDiv.classList.remove('show');
-        randomWordContainer.style.display = 'none';
-        currentMode = null;
-        currentRow = null;
-        modeLabel.textContent = '';
-        modeLabel.className = '';
-    }
-    //const sheetUrl = 'https://docs.google.com/spreadsheets/d/1zYGaKPYvT9_0c60qMY-PdCEWUucCdtWgvCGSvSInFRc/export?format=csv&id=1zYGaKPYvT9_0c60qMY-PdCEWUucCdtWgvCGSvSInFRc&gid=0';
+        // Nếu chưa có cookie thì gán link mặc định
+        const link = savedLink || 'https://docs.google.com/spreadsheets/d/1zYGaKPYvT9_0c60qMY-PdCEWUucCdtWgvCGSvSInFRc/export?format=csv&id=1zYGaKPYvT9_0c60qMY-PdCEWUucCdtWgvCGSvSInFRc&gid=0';
+        input.value = link;
 
-    async function readGoogleSheet(sheetUrl) {
-        try {
-            resetUI();
-            status.textContent = 'Đang tải dữ liệu từ Google Sheet...';
+      });
 
-            // Tải CSV trực tiếp từ link Google Sheets
-            const response = await fetch(sheetUrl);
-            if (!response.ok) throw new Error('Không thể tải dữ liệu từ Google Sheets');
-            const csvText = await response.text();
+          function resetUI() {
+              tableWrap.innerHTML = '';
+              errorEl.textContent = '';
+              status.textContent = '';
+              randomBtn.disabled = true;
+              translateBtn.disabled = true;
+              translateReverseBtn.disabled = true;
+              backBtn.disabled = true;
+              revealBtn.disabled = true;
+              speakBtn.disabled = true;
+              randomWordDiv.innerHTML = '';
+              randomWordDiv.classList.remove('show');
+              hintDiv.textContent = '';
+              hintDiv.classList.remove('show');
+              randomWordContainer.style.display = 'none';
+              currentMode = null;
+              currentRow = null;
+              modeLabel.textContent = '';
+              modeLabel.className = '';
+          }
+          //const sheetUrl = 'https://docs.google.com/spreadsheets/d/1zYGaKPYvT9_0c60qMY-PdCEWUucCdtWgvCGSvSInFRc/export?format=csv&id=1zYGaKPYvT9_0c60qMY-PdCEWUucCdtWgvCGSvSInFRc&gid=0';
 
-            // Dùng XLSX để parse CSV thành sheet
-            const workbook = XLSX.read(csvText, { type: 'string' });
-            const firstSheetName = workbook.SheetNames[0];
-            const sheet = workbook.Sheets[firstSheetName];
-            const sheetRange = XLSX.utils.sheet_to_json(sheet, { header: 1, raw: false });
+          async function readGoogleSheet(sheetUrl) {
+              try {
+                  resetUI();
+                  status.textContent = 'Đang tải dữ liệu từ Google Sheet...';
 
-            rows = sheetRange.map(r => [r[0] ?? '', r[1] ?? '']);
-            makeTable(rows);
+                  // Tải CSV trực tiếp từ link Google Sheets
+                  const response = await fetch(sheetUrl);
+                  if (!response.ok) throw new Error('Không thể tải dữ liệu từ Google Sheets');
+                  const csvText = await response.text();
 
-            randomBtn.disabled = false;
-            translateBtn.disabled = false;
-            translateReverseBtn.disabled = false;
+                  // Dùng XLSX để parse CSV thành sheet
+                  const workbook = XLSX.read(csvText, { type: 'string' });
+                  const firstSheetName = workbook.SheetNames[0];
+                  const sheet = workbook.Sheets[firstSheetName];
+                  const sheetRange = XLSX.utils.sheet_to_json(sheet, { header: 1, raw: false });
 
-            status.textContent = '✅ Đã đọc xong Google Sheet';
-        } catch (err) {
-            console.error(err);
-            errorEl.textContent = 'Lỗi khi đọc sheet: ' + (err.message || err);
-            status.textContent = '';
-        }
-    }
+                  rows = sheetRange.map(r => [r[0] ?? '', r[1] ?? '']);
+                  makeTable(rows);
 
-    function speak(txtToSpeak) {
-        console.log("speak: " + txtToSpeak);
-        if (txtToSpeak == '')
-            return;
-        const text = txtToSpeak;
-        const utterance = new SpeechSynthesisUtterance(text);
-        //utterance.pitch = 0.75;
-        //utterance.rate = 0.75;
-        utterance.lang = 'en-US'; // giọng tiếng Anh Mỹ
+                  randomBtn.disabled = false;
+                  translateBtn.disabled = false;
+                  translateReverseBtn.disabled = false;
 
-        speechSynthesis.speak(utterance);
-    }
+                  status.textContent = '✅ Đã đọc xong Google Sheet';
+              } catch (err) {
+                  console.error(err);
+                  errorEl.textContent = 'Lỗi khi đọc sheet: ' + (err.message || err);
+                  status.textContent = '';
+              }
+          }
 
-    function makeTable(data) {
-        if (!data.length) {
-            tableWrap.innerHTML = '<p class="hint">Không có dữ liệu trong cột A và B.</p>';
-            return;
-        }
-        const table = document.createElement('table');
-        const thead = document.createElement('thead');
-        thead.innerHTML = '<tr><th>Hàng</th><th>Cột A</th><th>Cột B</th></tr>';
-        table.appendChild(thead);
-        const tbody = document.createElement('tbody');
-        data.forEach((r, i) => {
-            const tr = document.createElement('tr');
-            const idx = document.createElement('td');
-            idx.textContent = i + 1;
-            const a = document.createElement('td');
-            a.textContent = r[0] ?? '';
-            const b = document.createElement('td');
-            b.textContent = r[1] ?? '';
-            tr.appendChild(idx);
-            tr.appendChild(a);
-            tr.appendChild(b);
-            tbody.appendChild(tr);
-        });
-        table.appendChild(tbody);
-        tableWrap.innerHTML = '';
-        tableWrap.appendChild(table);
-        status.textContent = `Đã đọc ${data.length} hàng từ sheet "Vocabulary"`;
-    }
+          function speak(txtToSpeak) {
+              console.log("speak: " + txtToSpeak);
+              if (txtToSpeak == '')
+                  return;
+              const text = txtToSpeak;
+              const utterance = new SpeechSynthesisUtterance(text);
+              //utterance.pitch = 0.75;
+              //utterance.rate = 0.75;
+              utterance.lang = 'en-US'; // giọng tiếng Anh Mỹ
 
-    input.addEventListener('change', async (ev) => {
-        resetUI();
-        const file = ev.target.files && ev.target.files[0];
-        if (!file) return;
-        status.textContent = `Đang đọc: ${file.name}`;
-        try {
-            const data = await file.arrayBuffer();
-            const workbook = XLSX.read(data, { type: 'array' });
-            const firstSheetName = workbook.SheetNames[0];
-            const sheet = workbook.Sheets[firstSheetName];
-            const sheetRange = XLSX.utils.sheet_to_json(sheet, { header: 1, raw: false });
-            rows = sheetRange.map(r => [r[0] ?? '', r[1] ?? '']);
-            makeTable(rows);
-            randomBtn.disabled = false;
-            translateBtn.disabled = false;
-            translateReverseBtn.disabled = false;
-        } catch (err) {
-            console.error(err);
-            errorEl.textContent = 'Lỗi khi đọc file: ' + (err.message || err);
-            status.textContent = '';
-        }
-    });
+              speechSynthesis.speak(utterance);
+          }
 
-    function shuffleArray(a) {
-        for (let i = a.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [a[i], a[j]] = [a[j], a[i]];
-        }
-    }
+          function makeTable(data) {
+              if (!data.length) {
+                  tableWrap.innerHTML = '<p class="hint">Không có dữ liệu trong cột A và B.</p>';
+                  return;
+              }
+              const table = document.createElement('table');
+              const thead = document.createElement('thead');
+              thead.innerHTML = '<tr><th>Hàng</th><th>Cột A</th><th>Cột B</th></tr>';
+              table.appendChild(thead);
+              const tbody = document.createElement('tbody');
+              data.forEach((r, i) => {
+                  const tr = document.createElement('tr');
+                  const idx = document.createElement('td');
+                  idx.textContent = i + 1;
+                  const a = document.createElement('td');
+                  a.textContent = r[0] ?? '';
+                  const b = document.createElement('td');
+                  b.textContent = r[1] ?? '';
+                  tr.appendChild(idx);
+                  tr.appendChild(a);
+                  tr.appendChild(b);
+                  tbody.appendChild(tr);
+              });
+              table.appendChild(tbody);
+              tableWrap.innerHTML = '';
+              tableWrap.appendChild(table);
+              status.textContent = `Đã đọc ${data.length} hàng từ sheet "Vocabulary"`;
+          }
 
-    function adjustFontSize() {
-        const container = randomWordDiv;
-        let fontSize = 10; // in vw
-        container.style.fontSize = fontSize + 'vw';
-        while (container.scrollWidth > container.clientWidth && fontSize > 1) {
-            fontSize -= 0.5;
-            container.style.fontSize = fontSize + 'vw';
-        }
-    }
+          input.addEventListener('change', async (ev) => {
+              resetUI();
+              const file = ev.target.files && ev.target.files[0];
+              if (!file) return;
+              status.textContent = `Đang đọc: ${file.name}`;
+              try {
+                  const data = await file.arrayBuffer();
+                  const workbook = XLSX.read(data, { type: 'array' });
+                  const firstSheetName = workbook.SheetNames[0];
+                  const sheet = workbook.Sheets[firstSheetName];
+                  const sheetRange = XLSX.utils.sheet_to_json(sheet, { header: 1, raw: false });
+                  rows = sheetRange.map(r => [r[0] ?? '', r[1] ?? '']);
+                  makeTable(rows);
+                  randomBtn.disabled = false;
+                  translateBtn.disabled = false;
+                  translateReverseBtn.disabled = false;
+              } catch (err) {
+                  console.error(err);
+                  errorEl.textContent = 'Lỗi khi đọc file: ' + (err.message || err);
+                  status.textContent = '';
+              }
+          });
 
-    function pickRandomRow() {
-        const validRows = rows.filter(r => r[0] || r[1]);
-        if (!validRows.length) {
-            errorEl.textContent = 'Không có dữ liệu trong cột A hoặc B';
-            return null;
-        }
-        return validRows[Math.floor(Math.random() * validRows.length)];
-    }
+          function shuffleArray(a) {
+              for (let i = a.length - 1; i > 0; i--) {
+                  const j = Math.floor(Math.random() * (i + 1));
+                  [a[i], a[j]] = [a[j], a[i]];
+              }
+          }
 
-    randomBtn.addEventListener('click', () => {
-        fillintheblank('half');
-    });
+          function adjustFontSize() {
+              const container = randomWordDiv;
+              let fontSize = 10; // in vw
+              container.style.fontSize = fontSize + 'vw';
+              while (container.scrollWidth > container.clientWidth && fontSize > 1) {
+                  fontSize -= 0.5;
+                  container.style.fontSize = fontSize + 'vw';
+              }
+          }
 
-    function fillintheblank(mode) {
+          function pickRandomRow() {
+              const validRows = rows.filter(r => r[0] || r[1]);
+              if (!validRows.length) {
+                  errorEl.textContent = 'Không có dữ liệu trong cột A hoặc B';
+                  return null;
+              }
+              return validRows[Math.floor(Math.random() * validRows.length)];
+          }
 
-        if (mode == 'half') {
+          randomBtn.addEventListener('click', () => {
+              fillintheblank('half');
+          });
 
-            currentMode = 'fill';
-            currentRow = pickRandomRow();
-            if (!currentRow) return;
-            modeLabel.textContent = 'Nhiệm vụ thử thách: Điền từ vào chỗ trống';
-            modeLabel.className = 'fill';
+          function fillintheblank(mode) {
 
-            const randWord = String(currentRow[0]);
-            const hint = currentRow[1] ?? '';
-            tableWrap.style.display = 'none';
-            status.textContent = '';
-            randomWordDiv.innerHTML = '';
-            hintDiv.textContent = '';
-            randomWordDiv.classList.remove('show');
-            hintDiv.classList.remove('show');
+              if (mode == 'half') {
 
-            const chars = randWord.split('');
-            const positions = [];
-            chars.forEach((c, i) => { if (c !== ' ') positions.push(i); });
-            const nonSpaceCount = positions.length;
-            let hideCount = Math.floor(nonSpaceCount / 3);
-            if (nonSpaceCount < 3) hideCount = 1;
+                  currentMode = 'fill';
+                  currentRow = pickRandomRow();
+                  if (!currentRow) return;
+                  modeLabel.textContent = 'Nhiệm vụ thử thách: Điền từ vào chỗ trống';
+                  modeLabel.className = 'fill';
 
-            shuffleArray(positions);
-            console.log(positions);
-            const hideIndices = new Set(positions.slice(0, hideCount));
-            console.log(hideIndices);
+                  const randWord = String(currentRow[0]);
+                  const hint = currentRow[1] ?? '';
+                  tableWrap.style.display = 'none';
+                  status.textContent = '';
+                  randomWordDiv.innerHTML = '';
+                  hintDiv.textContent = '';
+                  randomWordDiv.classList.remove('show');
+                  hintDiv.classList.remove('show');
 
-            chars.forEach((c, i) => {
-                const span = document.createElement('span');
-                span.classList.add('random-label');
-                if (c === ' ') {
-                    span.textContent = '\u00A0';
-                    span.style.borderBottom = 'none';
-                } else if (hideIndices.has(i)) {
-                    span.dataset.ch = c;
-                    span.textContent = '_';
-                    span.classList.add('hidden');
-                } else {
-                    span.textContent = c;
-                    span.classList.add('visible');
-                }
-                randomWordDiv.appendChild(span);
-            });
+                  const chars = randWord.split('');
+                  const positions = [];
+                  chars.forEach((c, i) => { if (c !== ' ') positions.push(i); });
+                  const nonSpaceCount = positions.length;
+                  let hideCount = Math.floor(nonSpaceCount / 3);
+                  if (nonSpaceCount < 3) hideCount = 1;
 
-            // Hiển thị gợi ý (cột B) ngay khi vào chế độ Điền từ
-            hintDiv.textContent = hint;
-            requestAnimationFrame(() => hintDiv.classList.add('show'));
+                  shuffleArray(positions);
+                  console.log(positions);
+                  const hideIndices = new Set(positions.slice(0, hideCount));
+                  console.log(hideIndices);
 
-            revealBtn.disabled = false;
-            speakBtn.disabled = false;
-            randomWordContainer.style.display = 'flex';
-            requestAnimationFrame(() => {
-                randomWordDiv.classList.add('show');
-                adjustFontSize();
-            });
-            backBtn.disabled = false;
-        } else {
-            currentMode = 'fill';
-            currentRow = pickRandomRow();
-            if (!currentRow) return;
-            modeLabel.textContent = 'Nhiệm vụ thử thách: Điền từ vào chỗ trống';
-            modeLabel.className = 'fill';
+                  chars.forEach((c, i) => {
+                      const span = document.createElement('span');
+                      span.classList.add('random-label');
+                      if (c === ' ') {
+                          span.textContent = '\u00A0';
+                          span.style.borderBottom = 'none';
+                      } else if (hideIndices.has(i)) {
+                          span.dataset.ch = c;
+                          span.textContent = '_';
+                          span.classList.add('hidden');
+                      } else {
+                          span.textContent = c;
+                          span.classList.add('visible');
+                      }
+                      randomWordDiv.appendChild(span);
+                  });
 
-            const randWord = String(currentRow[0]);
-            const hint = currentRow[1] ?? '';
-            tableWrap.style.display = 'none';
-            status.textContent = '';
-            randomWordDiv.innerHTML = '';
-            hintDiv.textContent = '';
-            randomWordDiv.classList.remove('show');
-            hintDiv.classList.remove('show');
+                  // Hiển thị gợi ý (cột B) ngay khi vào chế độ Điền từ
+                  hintDiv.textContent = hint;
+                  requestAnimationFrame(() => hintDiv.classList.add('show'));
 
-            const chars = randWord.split('');
-            const positions = [];
-            chars.forEach((c, i) => { if (c !== ' ') positions.push(i); });
-            const nonSpaceCount = positions.length;
-            let hideCount = nonSpaceCount;
-            if (nonSpaceCount < 3) hideCount = 1;
+                  revealBtn.disabled = false;
+                  speakBtn.disabled = false;
+                  randomWordContainer.style.display = 'flex';
+                  requestAnimationFrame(() => {
+                      randomWordDiv.classList.add('show');
+                      adjustFontSize();
+                  });
+                  backBtn.disabled = false;
+              } else {
+                  currentMode = 'fill';
+                  currentRow = pickRandomRow();
+                  if (!currentRow) return;
+                  modeLabel.textContent = 'Nhiệm vụ thử thách: Điền từ vào chỗ trống';
+                  modeLabel.className = 'fill';
 
-            shuffleArray(positions);
-            const hideIndices = new Set(positions.slice(0, hideCount));
+                  const randWord = String(currentRow[0]);
+                  const hint = currentRow[1] ?? '';
+                  tableWrap.style.display = 'none';
+                  status.textContent = '';
+                  randomWordDiv.innerHTML = '';
+                  hintDiv.textContent = '';
+                  randomWordDiv.classList.remove('show');
+                  hintDiv.classList.remove('show');
 
-            chars.forEach((c, i) => {
-                const span = document.createElement('span');
-                span.classList.add('random-label');
-                if (c === ' ') {
-                    span.textContent = '\u00A0';
-                    span.style.borderBottom = 'none';
-                } else if (i != 0) {
-                    span.dataset.ch = c;
-                    span.textContent = '_';
-                    span.classList.add('hidden');
-                } else {
-                    span.textContent = c;
-                    span.classList.add('visible');
-                }
-                randomWordDiv.appendChild(span);
-            });
+                  const chars = randWord.split('');
+                  const positions = [];
+                  chars.forEach((c, i) => { if (c !== ' ') positions.push(i); });
+                  const nonSpaceCount = positions.length;
+                  let hideCount = nonSpaceCount;
+                  if (nonSpaceCount < 3) hideCount = 1;
 
-            // Hiển thị gợi ý (cột B) ngay khi vào chế độ Điền từ
-            hintDiv.textContent = hint;
-            requestAnimationFrame(() => hintDiv.classList.add('show'));
+                  shuffleArray(positions);
+                  const hideIndices = new Set(positions.slice(0, hideCount));
 
-            revealBtn.disabled = false;
-            speakBtn.disabled = false;
-            randomWordContainer.style.display = 'flex';
-            requestAnimationFrame(() => {
-                randomWordDiv.classList.add('show');
-                adjustFontSize();
-            });
-            backBtn.disabled = false;
-        }
-    }
+                  chars.forEach((c, i) => {
+                      const span = document.createElement('span');
+                      span.classList.add('random-label');
+                      if (c === ' ') {
+                          span.textContent = '\u00A0';
+                          span.style.borderBottom = 'none';
+                      } else if (i != 0) {
+                          span.dataset.ch = c;
+                          span.textContent = '_';
+                          span.classList.add('hidden');
+                      } else {
+                          span.textContent = c;
+                          span.classList.add('visible');
+                      }
+                      randomWordDiv.appendChild(span);
+                  });
 
-    googleSheetBtn.addEventListener('click', () => {
+                  // Hiển thị gợi ý (cột B) ngay khi vào chế độ Điền từ
+                  hintDiv.textContent = hint;
+                  requestAnimationFrame(() => hintDiv.classList.add('show'));
 
-        // --- Khi nhấn nút lưu ---
-    const newLink = document.getElementById('txt_google_sheet').value.trim();
-    if (newLink) {
-      setCookie('tvonly-sheet-link', newLink);
-      console.log('Đã lưu link vào cookie!');
-    }
-        
-        readGoogleSheet(newLink);
-    });
+                  revealBtn.disabled = false;
+                  speakBtn.disabled = false;
+                  randomWordContainer.style.display = 'flex';
+                  requestAnimationFrame(() => {
+                      randomWordDiv.classList.add('show');
+                      adjustFontSize();
+                  });
+                  backBtn.disabled = false;
+              }
+          }
 
-    translateBtn.addEventListener('click', () => {
-        currentMode = 'en2vi';
-        currentRow = pickRandomRow();
-        if (!currentRow) return;
-        modeLabel.textContent = 'Nhiệm vụ thử thách: Đọc lớn và dịch nghĩa sang tiếng Việt';
-        modeLabel.className = 'en2vi';
+          googleSheetBtn.addEventListener('click', () => {
 
-        const randWord = String(currentRow[0]);
-        const hint = currentRow[1] ?? '';
-        tableWrap.style.display = 'none';
-        status.textContent = '';
-        randomWordDiv.innerHTML = '';
-        hintDiv.textContent = '';
-        randomWordDiv.classList.remove('show');
-        hintDiv.classList.remove('show');
+              // --- Khi nhấn nút lưu ---
+          const newLink = document.getElementById('txt_google_sheet').value.trim();
+          if (newLink) {
+            setCookie('tvonly-sheet-link', newLink);
+            console.log('Đã lưu link vào cookie!');
+          }
 
-        const chars = randWord.split('');
-        chars.forEach((c, i) => {
-            const span = document.createElement('span');
-            span.classList.add('random-label', 'visible');
-            span.textContent = c === ' ' ? '\u00A0' : c;
-            if (c === ' ') span.style.borderBottom = 'none';
-            randomWordDiv.appendChild(span);
-        });
+              readGoogleSheet(newLink);
+          });
 
-        revealBtn.disabled = false;
-        speakBtn.disabled = false;
-        randomWordContainer.style.display = 'flex';
-        requestAnimationFrame(() => {
-            randomWordDiv.classList.add('show');
-            adjustFontSize();
-        });
-        backBtn.disabled = false;
-    });
+          translateBtn.addEventListener('click', () => {
+              currentMode = 'en2vi';
+              currentRow = pickRandomRow();
+              if (!currentRow) return;
+              modeLabel.textContent = 'Nhiệm vụ thử thách: Đọc lớn và dịch nghĩa sang tiếng Việt';
+              modeLabel.className = 'en2vi';
 
-    translateReverseBtn.addEventListener('click', () => {
-        fillintheblank('full');
-    });
+              const randWord = String(currentRow[0]);
+              const hint = currentRow[1] ?? '';
+              tableWrap.style.display = 'none';
+              status.textContent = '';
+              randomWordDiv.innerHTML = '';
+              hintDiv.textContent = '';
+              randomWordDiv.classList.remove('show');
+              hintDiv.classList.remove('show');
 
-    revealBtn.addEventListener('click', () => {
-        if (!currentRow) return;
-        if (currentMode === 'fill') {
-            const labels = document.querySelectorAll('#randomWord .random-label');
-            labels.forEach(lbl => {
-                if (lbl.dataset.ch) {
-                    lbl.textContent = lbl.dataset.ch;
-                    lbl.classList.remove('hidden');
-                    lbl.classList.add('visible');
-                    delete lbl.dataset.ch;
-                }
-            });
-        } else if (currentMode === 'en2vi') {
-            hintDiv.textContent = currentRow[1] ?? '';
-            requestAnimationFrame(() => hintDiv.classList.add('show'));
-        } else if (currentMode === 'vi2en') {
-            hintDiv.textContent = currentRow[0] ?? '';
-            requestAnimationFrame(() => hintDiv.classList.add('show'));
-        }
-        revealBtn.disabled = true;
-    });
+              const chars = randWord.split('');
+              chars.forEach((c, i) => {
+                  const span = document.createElement('span');
+                  span.classList.add('random-label', 'visible');
+                  span.textContent = c === ' ' ? '\u00A0' : c;
+                  if (c === ' ') span.style.borderBottom = 'none';
+                  randomWordDiv.appendChild(span);
+              });
 
-    speakBtn.addEventListener('click', () => {
-        console.log(currentRow[0]);
-        if (!currentRow) return;
-        if (currentMode === 'fill') {
-            console.log(currentRow[0]);
-            speak(currentRow[0] ?? '');
-        } else if (currentMode === 'en2vi') {
-            speak(currentRow[0] ?? '');
-        } else if (currentMode === 'vi2en') {
-            speak(currentRow[0] ?? '');
-        }
-    });
+              revealBtn.disabled = false;
+              speakBtn.disabled = false;
+              randomWordContainer.style.display = 'flex';
+              requestAnimationFrame(() => {
+                  randomWordDiv.classList.add('show');
+                  adjustFontSize();
+              });
+              backBtn.disabled = false;
+          });
 
-    backBtn.addEventListener('click', () => {
-        randomWordDiv.innerHTML = '';
-        randomWordDiv.classList.remove('show');
-        hintDiv.textContent = '';
-        hintDiv.classList.remove('show');
-        randomWordContainer.style.display = 'none';
-        tableWrap.style.display = '';
-        revealBtn.disabled = true;
-        backBtn.disabled = true;
-        currentRow = null;
-        currentMode = null;
-        modeLabel.textContent = '';
-        modeLabel.className = '';
-        if (rows.length) {
-            status.textContent = `Đã đọc ${rows.length} hàng từ sheet \"Vocabulary\"`;
-        }
-    });
+          translateReverseBtn.addEventListener('click', () => {
+              fillintheblank('full');
+          });
 
-    resetUI();
+          revealBtn.addEventListener('click', () => {
+              if (!currentRow) return;
+              if (currentMode === 'fill') {
+                  const labels = document.querySelectorAll('#randomWord .random-label');
+                  labels.forEach(lbl => {
+                      if (lbl.dataset.ch) {
+                          lbl.textContent = lbl.dataset.ch;
+                          lbl.classList.remove('hidden');
+                          lbl.classList.add('visible');
+                          delete lbl.dataset.ch;
+                      }
+                  });
+              } else if (currentMode === 'en2vi') {
+                  hintDiv.textContent = currentRow[1] ?? '';
+                  requestAnimationFrame(() => hintDiv.classList.add('show'));
+              } else if (currentMode === 'vi2en') {
+                  hintDiv.textContent = currentRow[0] ?? '';
+                  requestAnimationFrame(() => hintDiv.classList.add('show'));
+              }
+              revealBtn.disabled = true;
+          });
+
+          speakBtn.addEventListener('click', () => {
+              console.log(currentRow[0]);
+              if (!currentRow) return;
+              if (currentMode === 'fill') {
+                  console.log(currentRow[0]);
+                  speak(currentRow[0] ?? '');
+              } else if (currentMode === 'en2vi') {
+                  speak(currentRow[0] ?? '');
+              } else if (currentMode === 'vi2en') {
+                  speak(currentRow[0] ?? '');
+              }
+          });
+
+          backBtn.addEventListener('click', () => {
+              randomWordDiv.innerHTML = '';
+              randomWordDiv.classList.remove('show');
+              hintDiv.textContent = '';
+              hintDiv.classList.remove('show');
+              randomWordContainer.style.display = 'none';
+              tableWrap.style.display = '';
+              revealBtn.disabled = true;
+              backBtn.disabled = true;
+              currentRow = null;
+              currentMode = null;
+              modeLabel.textContent = '';
+              modeLabel.className = '';
+              if (rows.length) {
+                  status.textContent = `Đã đọc ${rows.length} hàng từ sheet \"Vocabulary\"`;
+              }
+          });
+
+          resetUI();
     </script>
-</body>
-
+  </body>
 </html>
