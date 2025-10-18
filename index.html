@@ -131,7 +131,7 @@
 <body>
     <h1>Ôn tập từ vựng</h1>
     <div class="input-group">
-        <input id="txt_google_sheet" placeholder="Nhập link sheet public"  value='https://docs.google.com/spreadsheets/d/1zYGaKPYvT9_0c60qMY-PdCEWUucCdtWgvCGSvSInFRc/export?format=csv&id=1zYGaKPYvT9_0c60qMY-PdCEWUucCdtWgvCGSvSInFRc&gid=0' />
+        <input id="txt_google_sheet" placeholder="Nhập link sheet public" />
         <button id="google-sheet-btn">Đọc link google sheet</button>    
     </div>
    <div class="input-group">
@@ -181,6 +181,33 @@
     let rows = [];
     let currentMode = null; // 'fill', 'en2vi', 'vi2en'
     let currentRow = null;
+
+    // --- Hàm đọc cookie ---
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+// --- Hàm ghi cookie (lưu 30 ngày) ---
+function setCookie(name, value, days = 30) {
+  const date = new Date();
+  date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+  document.cookie = `${name}=${encodeURIComponent(value)}; expires=${date.toUTCString()}; path=/`;
+}
+
+    // --- Khi load trang ---
+window.addEventListener('DOMContentLoaded', () => {
+  const input = document.getElementById('txt_google_sheet');
+
+    
+  const savedLink = getCookie('tvonly-sheet-link');
+
+  // Nếu chưa có cookie thì gán link mặc định
+  const link = savedLink || 'https://docs.google.com/spreadsheets/d/1zYGaKPYvT9_0c60qMY-PdCEWUucCdtWgvCGSvSInFRc/export?format=csv&id=1zYGaKPYvT9_0c60qMY-PdCEWUucCdtWgvCGSvSInFRc&gid=0';
+  input.value = link;
+    
+});
 
     function resetUI() {
         tableWrap.innerHTML = '';
@@ -449,6 +476,14 @@
     }
 
     googleSheetBtn.addEventListener('click', () => {
+
+        // --- Khi nhấn nút lưu ---
+    const newLink = document.getElementById('txt_google_sheet').value.trim();
+    if (newLink) {
+      setCookie('tvonly-sheet-link', newLink);
+      console.log('Đã lưu link vào cookie!');
+    }
+        
         readGoogleSheet(sheetUrl);
     });
 
