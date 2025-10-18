@@ -103,6 +103,27 @@
   transform: scale(0.97);
   box-shadow: none;
 }
+
+        .custom-file-upload {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: #f8fafc;
+  border: 2px dashed #cbd5e1;
+  border-radius: 10px;
+  padding: 10px 16px;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  transition: all 0.2s ease;
+}
+
+.custom-file-upload:hover {
+  background: #f1f5f9;
+}
+
+.custom-file-upload input[type="file"] {
+  display: none; /* Ẩn input gốc */
+}
         
   </style>
 </head>
@@ -113,9 +134,11 @@
         <input id="txt_google_sheet" placeholder="Nhập link sheet public"  value='https://docs.google.com/spreadsheets/d/1zYGaKPYvT9_0c60qMY-PdCEWUucCdtWgvCGSvSInFRc/export?format=csv&id=1zYGaKPYvT9_0c60qMY-PdCEWUucCdtWgvCGSvSInFRc&gid=0' />
         <button id="google-sheet-btn">Đọc link google sheet</button>    
     </div>
-   <div>
-        <p class="hint">Chọn file Excel danh sách từ vựng. Cột A là ngôn ngữ 1, cột B là ngôn ngữ 2</p>
-        <input id="file-input" type="file" accept=".xlsx,.xls,.csv" />
+   <div class="input-group">
+       <label class="custom-file-upload">
+  <input id="file-input" type="file" accept=".xlsx,.xls,.csv" />
+  <span id="fileName">Chọn file Excel danh sách từ vựng. Cột A là ngôn ngữ 1, cột B là ngôn ngữ 2</span>
+</label>
     </div>
     <div class="controls">
         <button id="back-btn" disabled>Trở lại danh sách</button></div>
