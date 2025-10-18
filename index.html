@@ -203,14 +203,19 @@
 
           // --- Khi load trang ---
       window.addEventListener('DOMContentLoaded', () => {
+        const savedLink = "";
         const input = document.getElementById('txt_google_sheet');
+        const url_cookie = getCookie('tvonly-sheet-link')
 
-
-        const savedLink = decodeURIComponent(getCookie('tvonly-sheet-link'));
-
+        if(url_cookie !== undefined && myVar !== ""){
+          savedLink = decodeURIComponent(url_cookie);
+        }
+        else
+        {
+          savedLink = 'https://docs.google.com/spreadsheets/d/1zYGaKPYvT9_0c60qMY-PdCEWUucCdtWgvCGSvSInFRc/export?format=csv&id=1zYGaKPYvT9_0c60qMY-PdCEWUucCdtWgvCGSvSInFRc&gid=0';
+        }
         // Nếu chưa có cookie thì gán link mặc định
-        const link = savedLink || 'https://docs.google.com/spreadsheets/d/1zYGaKPYvT9_0c60qMY-PdCEWUucCdtWgvCGSvSInFRc/export?format=csv&id=1zYGaKPYvT9_0c60qMY-PdCEWUucCdtWgvCGSvSInFRc&gid=0';
-        input.value = link;
+        input.value = savedLink;
 
       });
 
