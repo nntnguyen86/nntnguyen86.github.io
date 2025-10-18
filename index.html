@@ -7,8 +7,8 @@
     <title>Ôn tập từ vựng</title>
     <style>
         @font-face {
-  font-family: 'VNI-Avo';
-  src: url('VNI AVO NOMAL.ttf') format('truetype');
+  font-family: 'HL Hoctro';
+  src: url('HLHOCTRO.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
@@ -163,8 +163,8 @@
             return;
         const text = txtToSpeak;
         const utterance = new SpeechSynthesisUtterance(text);
-        utterance.pitch = 0.75;
-        utterance.rate = 0.75;
+        //utterance.pitch = 0.75;
+        //utterance.rate = 0.75;
         utterance.lang = 'en-US'; // giọng tiếng Anh Mỹ
 
         speechSynthesis.speak(utterance);
