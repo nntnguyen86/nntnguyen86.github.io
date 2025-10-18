@@ -201,7 +201,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const input = document.getElementById('txt_google_sheet');
 
     
-  const savedLink = getCookie('tvonly-sheet-link');
+  const savedLink = decodeURIComponent(getCookie('tvonly-sheet-link'));
 
   // Nếu chưa có cookie thì gán link mặc định
   const link = savedLink || 'https://docs.google.com/spreadsheets/d/1zYGaKPYvT9_0c60qMY-PdCEWUucCdtWgvCGSvSInFRc/export?format=csv&id=1zYGaKPYvT9_0c60qMY-PdCEWUucCdtWgvCGSvSInFRc&gid=0';
@@ -229,7 +229,7 @@ window.addEventListener('DOMContentLoaded', () => {
         modeLabel.textContent = '';
         modeLabel.className = '';
     }
-    const sheetUrl = 'https://docs.google.com/spreadsheets/d/1zYGaKPYvT9_0c60qMY-PdCEWUucCdtWgvCGSvSInFRc/export?format=csv&id=1zYGaKPYvT9_0c60qMY-PdCEWUucCdtWgvCGSvSInFRc&gid=0';
+    //const sheetUrl = 'https://docs.google.com/spreadsheets/d/1zYGaKPYvT9_0c60qMY-PdCEWUucCdtWgvCGSvSInFRc/export?format=csv&id=1zYGaKPYvT9_0c60qMY-PdCEWUucCdtWgvCGSvSInFRc&gid=0';
 
     async function readGoogleSheet(sheetUrl) {
         try {
@@ -484,7 +484,7 @@ window.addEventListener('DOMContentLoaded', () => {
       console.log('Đã lưu link vào cookie!');
     }
         
-        readGoogleSheet(sheetUrl);
+        readGoogleSheet(newLink);
     });
 
     translateBtn.addEventListener('click', () => {
