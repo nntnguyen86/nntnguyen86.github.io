@@ -124,7 +124,87 @@
       .custom-file-upload input[type="file"] {
         display: none; /* Ẩn input gốc */
       }
+
+      .br-card {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  max-width: 320px;
+  padding: 12px 14px;
+  background: #ffffff;
+  color: #111;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  z-index: 9999;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  transition: transform .15s ease, opacity .15s ease;
+}
+
+/* image */
+.br-thumb {
+  width: 56px;
+  height: 56px;
+  object-fit: cover;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+/* text block */
+.br-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0; /* cho text wrap đúng */
+}
+.br-title {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1.1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.br-text {
+  font-size: 13px;
+  line-height: 1.2;
+  color: #555;
+  overflow: hidden;
+}
+
+/* close button */
+.br-close {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  border: none;
+  background: transparent;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  color: #777;
+  padding: 4px;
+  border-radius: 6px;
+}
+.br-close:hover { background: rgba(0,0,0,0.04); color: #333; }
+
+/* small screens: thu nhỏ và nằm sát viền */
+@media (max-width: 420px) {
+  .br-card {
+    right: 12px;
+    bottom: 12px;
+    max-width: 90%;
+    padding: 10px;
+    gap: 10px;
+  }
+  .br-thumb { width: 48px; height: 48px; }
+  .br-title { font-size: 13px; }
+  .br-text { font-size: 12px; }
+}
     </style>
+    
      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6946666884096593"
      crossorigin="anonymous"></script>
 <!-- EduAds -->
@@ -604,5 +684,23 @@
 
           resetUI();
     </script>
+    <div id="bottom-right-card" class="br-card" aria-live="polite">
+  <button class="br-close" aria-label="Đóng" title="Đóng">&times;</button>
+  <img class="br-thumb" src="https://via.placeholder.com/64" alt="Hình minh họa">
+  <div class="br-content">
+    <div class="br-title">Tiêu đề ngắn</div>
+    <div class="br-text">Đoạn mô tả ngắn — có thể chứa link <a href="#">Xem thêm</a>.</div>
+  </div>
+      <script>
+  document.querySelector('#bottom-right-card .br-close')
+    .addEventListener('click', function () {
+      const card = document.getElementById('bottom-right-card');
+      card.style.transition = 'opacity .2s, transform .2s';
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(10px) scale(.98)';
+      setTimeout(() => card.remove(), 220);
+    });
+</script>
+</div>
   </body>
 </html>
