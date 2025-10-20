@@ -205,9 +205,9 @@
 
           // --- Khi load trang ---
       window.addEventListener('DOMContentLoaded', () => {
-        const savedLink = "";
+        let savedLink = "";
         const input = document.getElementById('txt_google_sheet');
-        const url_cookie = getCookie('tvonly-sheet-link')
+        let url_cookie = getCookie('tvonly-sheet-link')
 
         if(url_cookie !== undefined && url_cookie !== ""){
           savedLink = decodeURIComponent(url_cookie);
