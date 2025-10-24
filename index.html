@@ -288,7 +288,7 @@
       <div class="hint-row">
         <div id="hint" class="subtitle"></div>
         <button id="reveal-btn" disabled>Đáp án</button>
-        <button id="speak-btn" disabled>Phát âm tiếng Anh 🔊</button>
+        <button id="speak-btn" disabled>Phát âm 🔊</button>
       </div>
       <div id="randomWord"></div>
     </div>
@@ -409,7 +409,10 @@
               const utterance = new SpeechSynthesisUtterance(text);
               //utterance.pitch = 0.75;
               //utterance.rate = 0.75;
-              utterance.lang = 'en-US'; // giọng tiếng Anh Mỹ
+              if(!isJapanese(txtToSpeak))
+                utterance.lang = 'en-US'; // giọng tiếng Anh Mỹ
+              else
+                utterance.lang = "ja-JP"; // giọng tiếng Anh Mỹ
 
               speechSynthesis.speak(utterance);
           }
@@ -490,6 +493,11 @@
                   return null;
               }
               return validRows[Math.floor(Math.random() * validRows.length)];
+          }
+
+          function isJapanese(text) {
+            const japaneseRegex = /[\u3040-\u30FF\u4E00-\u9FBF]/;
+            return japaneseRegex.test(text);
           }
 
           randomBtn.addEventListener('click', () => {
