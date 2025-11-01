@@ -330,6 +330,23 @@
         document.cookie = `${name}=${encodeURIComponent(value)}; expires=${date.toUTCString()}; path=/`;
       }
 
+      function formatGoogleSheetLink(url) {
+        try {
+          // Lấy ID của sheet giữa '/d/' và '/edit'
+          const match = url.match(/\/d\/([a-zA-Z0-9-_]+)/);
+          if (!match) return null;
+      
+          const sheetId = match[1];
+          const gidMatch = url.match(/gid=(\d+)/);
+          const gid = gidMatch ? gidMatch[1] : "0";
+      
+          return `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&id=${sheetId}&gid=${gid}`;
+        } catch (e) {
+          console.error("Lỗi khi format link:", e);
+          return null;
+        }
+      }
+
           // --- Khi load trang ---
       window.addEventListener('DOMContentLoaded', () => {
         let savedLink = "";
@@ -374,6 +391,8 @@
               try {
                   resetUI();
                   status.textContent = 'Đang tải dữ liệu từ Google Sheet...';
+
+                  sheetUrl = formatGoogleSheetLink(sheetUrl)
 
                   // Tải CSV trực tiếp từ link Google Sheets
                   const response = await fetch(sheetUrl);
