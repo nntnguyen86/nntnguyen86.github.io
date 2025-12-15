@@ -310,6 +310,7 @@
           const revealBtn = document.getElementById('reveal-btn');
           const speakBtn = document.getElementById('speak-btn');
           const modeLabel = document.getElementById('modeLabel');
+          let randomItem = null;
 
           let rows = [];
           let currentMode = null; // 'fill', 'en2vi', 'vi2en'
@@ -411,6 +412,7 @@
                   randomBtn.disabled = false;
                   translateBtn.disabled = false;
                   translateReverseBtn.disabled = false;
+                  randomItem = createRandomPicker(rows);
 
                   status.textContent = '✅ Đã đọc xong Google Sheet';
               } catch (err) {
@@ -481,6 +483,7 @@
                   randomBtn.disabled = false;
                   translateBtn.disabled = false;
                   translateReverseBtn.disabled = false;
+                  randomItem = createRandomPicker(rows);
               } catch (err) {
                   console.error(err);
                   errorEl.textContent = 'Lỗi khi đọc file: ' + (err.message || err);
@@ -494,6 +497,29 @@
                   [a[i], a[j]] = [a[j], a[i]];
               }
           }
+
+function createRandomPicker(array) {
+  let pool = [];
+  let index = 0;
+
+  function shuffle() {
+    pool = [...array];
+    for (let i = pool.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [pool[i], pool[j]] = [pool[j], pool[i]];
+    }
+    index = 0;
+  }
+
+  shuffle(); // trộn lần đầu
+
+  return function getNext() {
+    if (index >= pool.length) {
+      shuffle(); // hết thì tự reset
+    }
+    return pool[index++];
+  };
+}
 
           function adjustFontSize() {
               const container = randomWordDiv;
@@ -511,7 +537,15 @@
                   errorEl.textContent = 'Không có dữ liệu trong cột A hoặc B';
                   return null;
               }
-              return validRows[Math.floor(Math.random() * validRows.length)];
+              //return validRows[Math.floor(Math.random() * validRows.length)];
+
+return randomItem();
+
+
+
+
+
+
           }
 
           function isJapanese(text) {
