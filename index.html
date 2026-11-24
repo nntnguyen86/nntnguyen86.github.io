@@ -428,8 +428,8 @@
                   return;
               const text = txtToSpeak;
               const utterance = new SpeechSynthesisUtterance(text);
-              utterance.pitch = 2;
-              utterance.rate = 1;
+              utterance.pitch = 0.5;
+              utterance.rate = 0.75;
               if(!isJapanese(txtToSpeak))
                 utterance.lang = 'en-US'; // giọng tiếng Anh Mỹ
               else
